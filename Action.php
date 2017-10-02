@@ -388,7 +388,7 @@ class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do
         $this->_user = $this->widget('Widget_User');
         $this->_options = $this->widget('Widget_Options');
         $this->_cfg = Helper::options()->plugin('CommentToMail');
-        $this->mailLog("[INFO] 开始发送邮件…" . "\r\n");
+        $this->mailLog("[INFO] 开始发送邮件……" . "\r\n");
     }
 
     /**

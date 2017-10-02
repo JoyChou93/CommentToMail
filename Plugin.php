@@ -275,9 +275,9 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
         self::saveLog("[INFO] Socket方式发送HTTP请求……\r\n");
 
         fwrite($fp, $out);
-        usleep(20000); // 不睡眠，会导致NGINX 499错误
+        usleep(20000); // 不睡眠，HTTPS请求发送失败。
         fclose($fp);
-        self::saveLog("[INFO] Socket方式发送HTTP请求结束。\r\n");
+        self::saveLog("[INFO] Socket方式发送HTTP请求结束！\r\n");
     }
 
 
