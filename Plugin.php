@@ -35,7 +35,7 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
     public static function activate()
     {
         if (false == self::isAvailable()) {
-            throw new Typecho_Plugin_Exception(_t('对不起, 您的主机没有打开 allow_url_fopen 功能而且不支持 php-curl 扩展, 无法正常使用此功能'));
+            throw new Typecho_Plugin_Exception(_t('对不起, 您的主机不支持 php-curl 扩展, 无法正常使用此功能'));
         }
         
         if (false == self::isWritable(dirname(__FILE__) . '/cache/')) {
@@ -187,8 +187,8 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
         } else {
             $cfg['banMail'] = 0;
         }
-
-        $fileName = Typecho_Common::randString(8);
+        // 使用12位随机字符串，增加安全性
+        $fileName = Typecho_Common::randString(12);
         $cfg      = (object)$cfg;
         file_put_contents(dirname(__FILE__) . '/cache/' . $fileName, serialize($cfg));
         $url = ($options->rewrite) ? $options->siteUrl : $options->siteUrl . 'index.php';
@@ -209,29 +209,35 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
      */
     public static function asyncRequest($url)
     {
-        // 直接执行命令请求
-        system("curl $url");
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HEADER, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        // 限制为HTTP/HTTPS协议
+        curl_setopt($curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); //这个是重点,规避ssl的证书检查。
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE); // 跳过host验证
+        $data = curl_exec($curl);
+        curl_close($curl);
+        //var_dump($data);
+
         self::saveLog("Curl请求发送完成\r\n");
     }
+
 
     /**
      * 检测 适配器
      * @return string
      */
     public static function isAvailable()
-    {
-        function_exists('ini_get') && ini_get('allow_url_fopen') && (self::$_adapter = 'Socket');
-        false == self::$_adapter && function_exists('curl_version') && (self::$_adapter = 'Curl');
-        
-        //判断是否
-        $con = system('curl -V');
-        $pos  =  strpos ($con,  'file');
-        if ( $pos  ===  false ) {
-            self::$_adapter = false;        
-        }else{
-            self::$_adapter = true;
+    { 
+        // 判断PHP是否支持CURL
+        if (function_exists('curl_version')) {
+            return true;
+        } else {
+            return false;
         }
-        return self::$_adapter;
+        
     }
 
     /**
