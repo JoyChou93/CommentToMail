@@ -76,7 +76,7 @@ class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do
             && ( $toMe || $this->_email->ownerId != $this->_email->authorId) && 0 == $this->_email->parent ) {
             if (empty($this->_cfg->mail)) {
                 Typecho_Widget::widget('Widget_Users_Author@temp' . $this->_email->cid, array('uid' => $this->_email->ownerId))->to($user);
-            	$this->_email->to = $user->mail;
+                $this->_email->to = $user->mail;
             } else {
                 $this->_email->to = $this->_cfg->mail;
             }
@@ -265,16 +265,13 @@ class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do
      */
     public function mailLog($type = true, $content = null)
     {
-        //判断控制台是否开启日志记录
         if (!$this->_isMailLog) {
             return false;
         }
 
         $fileName = $this->_dir . '/log/mailer_log.txt';
         if ($type) {
-            $guest = explode('@', $this->_email->to);
-            $guest = substr($this->_email->to, 0, 1) . '***' . $guest[1];
-            $content  = $content ? $content : "向 " . $guest . " 发送邮件成功！\r\n";
+            $content  = $content ? $content : "向 " . $this->_email->to . " 发送邮件成功！\r\n";
         }
 
         file_put_contents($fileName, $content, FILE_APPEND);
@@ -382,25 +379,12 @@ class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do
     }
 
     /**
-     * 写入记录
-     * @param $content
-     * @return bool
-     */
-    public static function saveLog($content)
-    {
-        if (!this->$_isMailLog) {
-            return false;
-        }
-
-        file_put_contents(dirname(__FILE__) . '/log/mailer_log.txt', $content, FILE_APPEND);
-    }
-
-    /**
      * 初始化
      * @return $this
      */
     public function init()
     {
+        $this->_isMailLog = in_array('to_log', Helper::options()->plugin('CommentToMail')->other) ? true : false;
         $this->_dir = dirname(__FILE__);
         $this->_db = Typecho_Db::get();
         $this->_user = $this->widget('Widget_User');

@@ -188,7 +188,7 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
             $cfg['banMail'] = 0;
         }
 
-        $fileName = Typecho_Common::randString(7);
+        $fileName = Typecho_Common::randString(8);
         $cfg      = (object)$cfg;
         file_put_contents(dirname(__FILE__) . '/cache/' . $fileName, serialize($cfg));
         $url = ($options->rewrite) ? $options->siteUrl : $options->siteUrl . 'index.php';
@@ -209,73 +209,9 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
      */
     public static function asyncRequest($url)
     {
-        self::isAvailable();
-        self::$_adapter == 'Socket' ? self::socket($url) : self::curl($url);
-    }
-
-    /**
-     * Socket 请求
-     * @param $url
-     * @return bool
-     */
-    public static function socket($url)
-    {
-        $params = parse_url($url);
-        $path = $params['path'] . '?' . $params['query'];
-        $host = $params['host'];
-        $port = 80;
-        $scheme = '';
-
-        if ('https' == $params['scheme']) {
-            $port = 443;
-            $scheme = 'ssl://';
-        }
-
-        if (function_exists('fsockopen')) {
-            $fp = @fsockopen ($scheme . $host, $port, $errno, $errstr, 30);
-        } elseif (function_exists('pfsockopen')) {
-            $fp = @pfsockopen ($scheme . $host, $port, $errno, $errstr, 30);
-        } else {
-            $fp = stream_socket_client($scheme . $host . ":$port", $errno, $errstr, 30);
-        }
-
-        if ($fp === false) {
-            self::saveLog("SOCKET错误," . $errno . ':' . $errstr);
-            return false;
-        }
-
-        stream_set_blocking($fp, 0);
-
-        $out = "GET " . $path . " HTTP/1.1\r\n";
-        $out .= "Host: $host\r\n";
-        $out .= "Connection: Close\r\n\r\n";
-
-        self::saveLog("Socket 方式发送\r\n");
-
-        fwrite($fp, $out);
-        // 修复webserver返回499的BUG。详情：http://www.aichengxu.com/php/11256331.htm
-        usleep(20000);
-        fclose($fp);
-        self::saveLog("Socket 请求结束\r\n");
-    }
-
-    /**
-     * Curl 请求
-     * @param $url
-     */
-    public static function curl($url)
-    {
-        $cmh = curl_multi_init();
-        $ch1 = curl_init();
-        curl_setopt($ch1, CURLOPT_URL, $url);
-        curl_multi_add_handle($cmh, $ch1);
-        curl_multi_exec($cmh, $active);
-        
-        self::saveLog("Curl 方式发送\r\n");
-        
-        curl_multi_remove_handle($cmh, $ch1);
-        curl_multi_close($cmh);
-        self::saveLog("Curl 请求结束\r\n");
+        // 直接执行命令请求
+        system("curl $url");
+        self::saveLog("Curl请求发送完成\r\n");
     }
 
     /**
@@ -287,6 +223,14 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
         function_exists('ini_get') && ini_get('allow_url_fopen') && (self::$_adapter = 'Socket');
         false == self::$_adapter && function_exists('curl_version') && (self::$_adapter = 'Curl');
         
+        //判断是否
+        $con = system('curl -V');
+        $pos  =  strpos ($con,  'file');
+        if ( $pos  ===  false ) {
+            self::$_adapter = false;        
+        }else{
+            self::$_adapter = true;
+        }
         return self::$_adapter;
     }
 

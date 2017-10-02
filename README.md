@@ -18,12 +18,15 @@
 
 #### v3.0.0 
 
-1. 修复邮件发送时WebServer返回499的BUG
-2. 升级PHPMail版本到最新版本
+1. 修复使用Socket请求url失败的Bug。
+2. 使用curl方式发送HTTP或者HTTPS请求，所以目前可能不支持Windows。
+3. 修改Action.php不获取控制台是否写日志的配置，导致日志写入不成功Bug。
+4. 修改随机文件为8位
+
 
 ### 邮件发送实现模式
 
-1. 将评论的POST请求记录到`cache/7位随机字符串`文件中
+1. 将评论的POST请求记录到`cache/8位随机字符串`文件中
 2. 通过Socket或者Curl请求`/action/comment-to-mail?send=5asDbmZ`
 3. `action.php`收到请求后，读取cache文件里的内容，并发送邮件。
 
