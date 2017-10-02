@@ -39,7 +39,9 @@ typecho 1.0 (14.10.10)
 
 ## 说明
 
-fsockopen发送HTTP请求时，加上`usleep`函数后，邮件会发送成功，可看到的返回码依然是499。如果想处理这个499返回码问题，可以在nginx配置中加上`fastcgi_ignore_client_abort on;`。参考[http://www.cnblogs.com/52fhy/p/6209479.html](http://www.cnblogs.com/52fhy/p/6209479.html)
+fsockopen发送HTTP请求时，加上`usleep`函数后，邮件会发送成功，可看到的返回码依然是499。如果想处理这个499返回码问题，可以在nginx配置中加上`fastcgi_ignore_client_abort on;`
+
+
 
 ## 运行结果
 
@@ -52,3 +54,7 @@ fsockopen发送HTTP请求时，加上`usleep`函数后，邮件会发送成功�
 [INFO] 向joychou@joychou.org发送邮件成功！
 [INFO] 2017-10-03 01:18:09 邮件发送完毕!
 ```
+
+## 引用
+
+- [http://www.cnblogs.com/52fhy/p/6209479.html](http://www.cnblogs.com/52fhy/p/6209479.html)
