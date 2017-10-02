@@ -215,8 +215,8 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
         curl_setopt($curl, CURLOPT_PROTOCOLS, CURLPROTO_HTTP | CURLPROTO_HTTPS); // 限制为HTTP/HTTPS协议
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false); //这个是重点,规避ssl的证书检查。
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false); // 跳过host验证
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 10);  
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 1); 
+        curl_setopt($curl, CURLOPT_TIMEOUT, 1); 
 
         $data = curl_exec($curl);
         curl_close($curl);
