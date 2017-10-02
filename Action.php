@@ -3,7 +3,7 @@
  * CommentToMail Plugin
  * 异步发送提醒邮件到博主或访客的邮箱
  * 
- * @copyright  Copyright (c) 2014 Byends (http://www.byends.com)
+ * @copyright  Copyright (c) 2017 JoyChou (https://joychou.org)
  * @license    GNU General Public License 2.0
  */
 class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do

@@ -2,7 +2,7 @@
 /**
  * 评论邮件提醒 控制台
  *
- * @copyright  Copyright (c) 2014 Byends (http://www.byends.com)
+ * @copyright  Copyright (c) 2017 JoyChou (https://joychou.org)
  * @license    GNU General Public License 2.0
  */
 class CommentToMail_Console extends Typecho_Widget
