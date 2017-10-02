@@ -388,7 +388,7 @@ class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do
      */
     public static function saveLog($content)
     {
-        if (!self::$_isMailLog) {
+        if (!this->$_isMailLog) {
             return false;
         }
 
