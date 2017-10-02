@@ -35,7 +35,7 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
     public static function activate()
     {
         if (false == self::isAvailable()) {
-            throw new Typecho_Plugin_Exception(_t('对不起, 您的主机不支持 php-curl 扩展, 无法正常使用此功能'));
+            throw new Typecho_Plugin_Exception(_t('对不起, 您的主机没有打开 allow_url_fopen 功能而且不支持 php-curl 扩展, 无法正常使用此功能'));
         }
         
         if (false == self::isWritable(dirname(__FILE__) . '/cache/')) {
@@ -209,6 +209,18 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
      */
     public static function asyncRequest($url)
     {
+        self::isAvailable();
+        self::$_adapter == 'Socket' ? self::socket($url) : self::curl($url);
+    }
+
+
+    /**
+     * 使用CURL异步发送HTTP请求，最少需要等待1s
+     * @param $url
+     */
+    public static function curl($url)
+    {
+        self::saveLog("[INFO] CURL方式发送HTTP请求……\r\n");
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -220,8 +232,54 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
 
         $data = curl_exec($curl);
         curl_close($curl);
-        //var_dump($data);
+        self::saveLog("[INFO] CURL方式发送HTTP请求结束。\r\n");
+        //var_dump($data);   
     }
+
+
+    /**
+     * Socket 发送HTTP请求
+     * @param $url
+     * @return bool
+     */
+    public static function socket($url)
+    {
+        $params = parse_url($url);
+        $path = $params['path'] . '?' . $params['query'];
+        $host = $params['host'];
+        $port = 80;
+        $scheme = '';
+
+        if ('https' == $params['scheme']) {
+            $port = 443;
+            $scheme = 'ssl://';
+        }
+
+        if (function_exists('fsockopen')) {
+            $fp = @fsockopen ($scheme . $host, $port, $errno, $errstr, 30);
+        } elseif (function_exists('pfsockopen')) {
+            $fp = @pfsockopen ($scheme . $host, $port, $errno, $errstr, 30);
+        } else {
+            $fp = stream_socket_client($scheme . $host . ":$port", $errno, $errstr, 30);
+        }
+
+        if ($fp === false) {
+            self::saveLog("[ERROR] Socket请求错误，" . $errno . ':' . $errstr);
+            return false;
+        }
+
+        $out = "GET " . $path . " HTTP/1.1\r\n";
+        $out .= "Host: $host\r\n";
+        $out .= "Connection: Close\r\n\r\n";
+
+        self::saveLog("[INFO] Socket方式发送HTTP请求……\r\n");
+
+        fwrite($fp, $out);
+        usleep(20000); // 不睡眠，会导致NGINX 499错误
+        fclose($fp);
+        self::saveLog("[INFO] Socket方式发送HTTP请求结束。\r\n");
+    }
+
 
 
     /**
@@ -229,14 +287,11 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
      * @return string
      */
     public static function isAvailable()
-    { 
-        // 判断PHP是否支持CURL
-        if (function_exists('curl_version')) {
-            return true;
-        } else {
-            return false;
-        }
+    {
+        function_exists('ini_get') && ini_get('allow_url_fopen') && (self::$_adapter = 'Socket');
+        false == self::$_adapter && function_exists('curl_version') && (self::$_adapter = 'Curl');
         
+        return self::$_adapter;
     }
 
     /**
