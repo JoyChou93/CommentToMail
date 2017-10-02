@@ -382,6 +382,20 @@ class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do
     }
 
     /**
+     * 写入记录
+     * @param $content
+     * @return bool
+     */
+    public static function saveLog($content)
+    {
+        if (!self::$_isMailLog) {
+            return false;
+        }
+
+        file_put_contents(dirname(__FILE__) . '/log/mailer_log.txt', $content, FILE_APPEND);
+    }
+
+    /**
      * 初始化
      * @return $this
      */
