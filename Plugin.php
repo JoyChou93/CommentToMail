@@ -2,7 +2,7 @@
 /**
  * 评论邮件提醒插件
  *
- * @package Comment2Mail
+ * @package CommentToMail
  * @author JoyChou
  * @version 3.0.0
  * @link https://joychou.org
