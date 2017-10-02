@@ -249,11 +249,11 @@ class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do
 
         // 如果邮件发送成功
         if ($result = $mailer->Send()) {
-            $this->mailLog("[INFO] 向 " . $this->_email->to . " 发送邮件成功！\r\n");
+            $this->mailLog("[INFO] 向" . $this->_email->to . "发送邮件成功！\r\n");
         } 
         // 邮件发送失败
         else { 
-            $this->mailLog("[INFO] 向 " . $this->_email->to . " 发送邮件失败！" . $mailer->ErrorInfo . "\r\n");
+            $this->mailLog("[INFO] 向" . $this->_email->to . "发送邮件失败！" . $mailer->ErrorInfo . "\r\n");
             $result = $mailer->ErrorInfo;
         }
         
@@ -388,7 +388,7 @@ class CommentToMail_Action extends Typecho_Widget implements Widget_Interface_Do
         $this->_user = $this->widget('Widget_User');
         $this->_options = $this->widget('Widget_Options');
         $this->_cfg = Helper::options()->plugin('CommentToMail');
-        $this->mailLog("[INFO] 开始发送邮件。文件名为：" . $this->request->send . "\r\n");
+        $this->mailLog("[INFO] 开始发送邮件…" . "\r\n");
     }
 
     /**

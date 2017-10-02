@@ -197,7 +197,7 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
         $date = new Typecho_Date(Typecho_Date::gmtTime());
         $time = $date->format('Y-m-d H:i:s');
         
-        self::saveLog("\r\n[INFO] {$time} \r\n[INFO]开始发送请求：{$url}\r\n");
+        self::saveLog("\r\n[INFO] {$time} \r\n[INFO] 开始发送请求：{$url}\r\n");
         self::asyncRequest($url);
     }
 

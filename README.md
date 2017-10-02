@@ -36,5 +36,11 @@
 
 typecho 1.0 (14.10.10)
 
+### 运行结果
 
+[INFO] 2017-10-03 00:10:02
+[INFO] 开始发送请求：https://joychou.org/action/comment-to-mail?send=rWzIDYWzQJ4V
+[INFO] 开始发送邮件…
+[INFO] 向xxx@qq.com发送邮件成功！
+[INFO] 2017-10-03 00:10:07 邮件发送完毕!
 
