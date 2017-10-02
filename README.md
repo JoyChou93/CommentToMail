@@ -18,7 +18,7 @@
 
 #### v3.0.0 
 
-1. 修复使用Socket请求URL失败的Bug。
+1. 修复使用Socket发送HTTPS请求失败的Bug。
 2. 使用Curl方式发送HTTP或者HTTPS请求。
 3. 修复Action.php不获取控制台是否写日志的配置，导致日志写入不成功Bug。
 4. 修改随机文件为12位，增强安全性。
