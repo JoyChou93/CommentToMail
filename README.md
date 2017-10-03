@@ -1,20 +1,16 @@
 
 # Typecho 评论邮件提醒插件
 
->访客评论后，将会发送评论内容到您指定的邮箱。
-
-原作者是  DEFE (http://defe.me)。
+访客评论后，将会发送评论内容到您指定的邮箱。
 
 
 ## 使用说明
 
-1. 下载插件
+1. git clone代码到`/usr/plugins/`目录
+2. 进行后台配置，建议配置成如下配置。163邮箱可使用密码，QQ需要使用授权码。
 
-2. git clone代码到`/usr/plugins/`目录
+![setting](http://o8jiujmnw.bkt.clouddn.com/Typecho-CommentToMail-Setting.png)
 
-3. 后台配置
-	- 建议端口配置465，25端口测试邮件发送失败 
-	- 由于写日志需要php用户的写权限，需要对插件目录`chmod -R 777`
 
 ## 升级日志
 
@@ -36,6 +32,8 @@
 ## 测试环境
 
 typecho 1.0 (14.10.10)
+
+
 
 ## 说明
 
