@@ -9,7 +9,7 @@
 1. git clone代码到`/usr/plugins/`目录
 2. 进行后台配置，建议配置成如下配置。163邮箱可使用密码，QQ需要使用授权码。
 
-![setting](https://joychou-blog.oss-cn-hangzhou.aliyuncs.com/Typecho-CommentToMail-Setting.png)
+![setting](https://raw.githubusercontent.com/JoyChou93/CommentToMail/master/Typecho-CommentToMail-Setting.png)
 
 
 ## 升级日志
