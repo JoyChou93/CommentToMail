@@ -9,15 +9,19 @@
 1. git clone代码到`/usr/plugins/`目录
 2. 进行后台配置，建议配置成如下配置。163邮箱可使用密码，QQ需要使用授权码。
 
-![setting](http://o8jiujmnw.bkt.clouddn.com/Typecho-CommentToMail-Setting.png)
+![setting](https://joychou-blog.oss-cn-hangzhou.aliyuncs.com/Typecho-CommentToMail-Setting.png)
 
 
 ## 升级日志
 
+#### v3.0.1
+
+1. 使用cURL方式发送HTTP请求，不再使用Socket方式。
+
 #### v3.0.0 
 
 1. 修复使用Socket发送HTTPS请求失败的BUG
-2. 修复使用Curl方式发送HTTP或者HTTPS请求失败的BUG
+2. 修复使用cURL方式发送HTTP或者HTTPS请求失败的BUG
 3. 修复Action.php不获取控制台是否写日志的配置，导致日志写入不成功Bug
 4. 修改随机文件为12位，增强安全性
 5. 修改日志中发送的邮箱为明文

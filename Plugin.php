@@ -4,7 +4,7 @@
  *
  * @package CommentToMail
  * @author JoyChou
- * @version 3.0.0
+ * @version 3.0.1
  * @link https://joychou.org
  * @oriAuthor DEFE (http://defe.me)
  * 
