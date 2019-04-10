@@ -198,7 +198,9 @@ class CommentToMail_Plugin implements Typecho_Plugin_Interface
         $time = $date->format('Y-m-d H:i:s');
         
         self::saveLog("\r\n[INFO] {$time} \r\n[INFO] 开始发送请求：{$url}\r\n");
-        self::asyncRequest($url);
+        self::curl($url); // 使用cURL方式发送HTTP请求
+        // socket方式总会有问题，所以用curl方式
+        // self::asyncRequest($url); 
     }
 
 
